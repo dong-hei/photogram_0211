@@ -1,0 +1,45 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: utf-8
+      enabled: true
+    
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+      
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/photogram?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false
+    username: cos
+    password: cos1234
+
+#클라 --요청-> 디스패처 -> 스프링 컨테이너[ --세션(DB)-> 컨트롤러 -> SVC -> Repo -> 영속성 컨텍 -> DB]
+#클라 --요청-> 디스패처 -> 스프링 컨테이너[ 세션(DB) <-  컨트롤러  <-  SVC <--세션종료- Repo <- 영속성 컨텍 <- DB]
+#지연로딩 못함
+#Open-in-view : true 뷰를 트루로 한다. 세션종료를 디스패쳐와 컨트롤러 사이에서 한다.
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+#      서버 종료시 데이터 롤백 create // update 서버 종료되어도 데이터 유지
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+      
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 2MB
+
+  security:
+    user:
+      name: test
+      password: 1234   
+
+file:
+  path: D:/sample/
