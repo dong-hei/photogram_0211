@@ -6,12 +6,15 @@ import com.cos.photogramstart.domain.img.ImageRepo;
 import com.cos.photogramstart.web.ImageUploadDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -19,6 +22,27 @@ import java.util.UUID;
 public class ImageSvc {
 
     private final ImageRepo imageRepo;
+
+
+    @Transactional(readOnly = true) // 디폴트: 영속성 컨텍스트 변경 감지 -> 더티체킹 -> flush(반영) But readOnly를 하면 flush()를 안한다.
+    public Page<Image> imgStory(int principalId, Pageable pageable) {
+        Page<Image> images = imageRepo.mStory(principalId, pageable);
+
+        //imgs에 좋아요 상태 담기
+        images.forEach((image) -> {
+
+            image.setLikeCount(image.getLikes().size());
+
+            image.getLikes().forEach((like)->{
+                if(like.getUser().getId() == principalId){
+                    //해당 이미지에 좋아요 한 사람을 찾아 현제 로그인 사람이 좋아요 한건지 비교
+                    image.setLikeState(true);
+                }
+            });
+        });
+
+        return images;
+    }
 
     @Value("${file.path}") // application.yml 설정 경로 가져오기
     //업로드 파일을 프로젝트 외부에 두는 이유는?

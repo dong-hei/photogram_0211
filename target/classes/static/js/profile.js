@@ -71,9 +71,9 @@ function getSubscribeModalItem(u) {
 
                 				if(!u.equalUserState){ // 동일 유저가 아닐 때 버튼이 만들어져야함
                 				    if(u.subscribeState){ //구독상태
-                	                   item += `<button class="cta blue" onclick="toggleSubscribeModal(this)">구독취소</button>`;
+                	                   item += `<button class="cta blue" onclick="toggleSubscribe(${u.id}, this)">구독취소</button>`;
                 				    }else{
-                				       item += `<button class="cta" onclick="toggleSubscribeModal(this)">구독하기</button>`;
+                				       item += `<button class="cta" onclick="toggleSubscribe(${u.id}, this)">구독하기</button>`;
                 				}
                 				}
 
@@ -118,7 +118,7 @@ function profileImageUpload() {
 }
 
 
-// (5) 사용자 정보 메뉴 열기 닫기
+// (4) 사용자 정보 메뉴 열기 닫기
 function popup(obj) {
 	$(obj).css("display", "flex");
 }
@@ -128,17 +128,17 @@ function closePopup(obj) {
 }
 
 
-// (6) 사용자 정보(회원정보, 로그아웃, 닫기) 모달
+// (5) 사용자 정보(회원정보, 로그아웃, 닫기) 모달
 function modalInfo() {
 	$(".modal-info").css("display", "none");
 }
 
-// (7) 사용자 프로파일 이미지 메뉴(사진업로드, 취소) 모달
+// (6) 사용자 프로파일 이미지 메뉴(사진업로드, 취소) 모달
 function modalImage() {
 	$(".modal-image").css("display", "none");
 }
 
-// (8) 구독자 정보 모달 닫기
+// (7) 구독자 정보 모달 닫기
 function modalClose() {
 	$(".modal-subscribe").css("display", "none");
 	location.reload();
