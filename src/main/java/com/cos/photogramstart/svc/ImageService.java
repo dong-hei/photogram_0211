@@ -19,10 +19,14 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ImageSvc {
+public class ImageService {
 
     private final ImageRepo imageRepo;
 
+    @Transactional(readOnly = true)
+    public List<Image> popularImgs(){
+            return imageRepo.mPopular();
+    }
 
     @Transactional(readOnly = true) // 디폴트: 영속성 컨텍스트 변경 감지 -> 더티체킹 -> flush(반영) But readOnly를 하면 flush()를 안한다.
     public Page<Image> imgStory(int principalId, Pageable pageable) {

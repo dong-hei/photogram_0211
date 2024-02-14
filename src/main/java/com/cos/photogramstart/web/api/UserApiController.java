@@ -3,8 +3,7 @@ package com.cos.photogramstart.web.api;
 import com.cos.photogramstart.config.auth.PrincipalDetails;
 import com.cos.photogramstart.domain.user.User;
 import com.cos.photogramstart.handler.ex.CustomValidationApiEx;
-import com.cos.photogramstart.handler.ex.CustomValidationEx;
-import com.cos.photogramstart.svc.SubscribeSvc;
+import com.cos.photogramstart.svc.SubscribeService;
 import com.cos.photogramstart.svc.UserService;
 import com.cos.photogramstart.web.dto.CMResDto;
 import com.cos.photogramstart.web.dto.UserUpdateDto;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -30,7 +30,17 @@ import java.util.Map;
 public class UserApiController {
 
     private final UserService userService;
-    private final SubscribeSvc subscribeSvc;
+    private final SubscribeService subscribeSvc;
+
+    //MultipartFile 파람 : dto가 아닌 ajax통신으로 img를 받을때 필요함, 변수명이 중요한데 jsp에 name과 정확하게 매칭해야 반영됨
+    @PutMapping("/api/user/{principalId}/profileImgUrl")
+    public ResponseEntity<?> profileImgUrlUpdate(@PathVariable int principalId,
+                                                 MultipartFile profileImageFile,
+                                                 @AuthenticationPrincipal PrincipalDetails principalDetails){
+        User userEntity = userService.memberProfileImgUpdate(principalId, profileImageFile);
+        principalDetails.setUser(userEntity);
+        return new ResponseEntity<>(new CMResDto<>(1, "프로필사진 변경 성공", null), HttpStatus.OK);
+    }
 
     @GetMapping("/api/user/{pageUserId}/subscribe")
     public ResponseEntity<?> subscribeList(@PathVariable int pageUserId,

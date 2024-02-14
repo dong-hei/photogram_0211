@@ -15,7 +15,7 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class SubscribeSvc {
+public class SubscribeService {
 
     private final SubscribeRepo subscribeRepo;
     private final EntityManager em; //Repository는 EntityManager를 구현해서 만들어져 있는 구현체

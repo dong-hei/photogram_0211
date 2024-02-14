@@ -34,7 +34,9 @@
 </head>
 
 <body>
-	
+	<!-- principal 담아두는 공간 -->
+	<input type="hidden" id="principalId" value="${principal.user.id}"/>
+
 	<header class="header">
 		<div class="container">
 			<a href="/" class="logo">
@@ -55,3 +57,4 @@
 			</nav>
 		</div>
 	</header>
+
